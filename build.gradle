@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+}
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.seleniumhq.selenium:selenium-java:3.141.59'
+    implementation 'org.jsoup:jsoup:1.14.3'
+    implementation 'org.apache.poi:poi:5.2.0'
+    implementation 'org.apache.poi:poi-ooxml:5.2.0'
+    implementation 'org.apache.logging.log4j:log4j-core:2.17.1'
+}
+
+task buildJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'Main'
+    }
+    with jar
+}
+//Fat Jar 생성
+task buildFatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'Main'
+    }
+    duplicatesStrategy = DuplicatesStrategy.WARN
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it :
+            zipTree(it) } }
+    with jar
+}
